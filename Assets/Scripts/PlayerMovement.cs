@@ -56,7 +56,29 @@ public class PlayerMovement : MonoBehaviour {
             playerMesh.transform.eulerAngles = facing;
         }
 
+
+        if (jump)
+        {
+            rb.velocity = new Vector3(m_Move.x, jumpForce, m_Move.z);
         }
+        else
+        {
+            rb.velocity = new Vector3(m_Move.x, rb.velocity.y, m_Move.z);
+        }
+
+
+
+
+        //Input for Jump
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jump = true;
+        }
+        else
+        {
+            jump = false;
+        }
+    }
 
     void FixedUpdate()
     {
@@ -66,25 +88,7 @@ public class PlayerMovement : MonoBehaviour {
         m_Move = (v * m_CamForward + h * m_Cam.right) * walkSpeed;
         //m_Character.Move(m_Move);
 
-        if (jump)
-            {
-            rb.velocity = new Vector3(m_Move.x, jumpForce, m_Move.z);
-            }else
-            {
-            rb.velocity = new Vector3(m_Move.x, rb.velocity.y, m_Move.z);
-            }
-        
 
-
-
-        //Input for Jump
-        if (Input.GetKeyDown(KeyCode.Space))
-            {
-            jump = true;
-            }else
-            {
-            jump = false;
-            }
     }
 
 }
