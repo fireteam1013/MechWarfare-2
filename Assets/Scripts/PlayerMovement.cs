@@ -15,8 +15,10 @@ public class PlayerMovement : MonoBehaviour {
     private Rigidbody rb;
 
     private float walkSpeed = 3f;
+    private float runSpeed = 5f;
     private float jumpForce = 4f;
     private bool jump;
+    private bool sprint;
     Vector3 facing;
 
     void Start()
@@ -66,7 +68,13 @@ public class PlayerMovement : MonoBehaviour {
             rb.velocity = new Vector3(m_Move.x, rb.velocity.y, m_Move.z);
         }
 
-
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            sprint = true;
+        }else
+        {
+            sprint = false;
+        }
 
 
         //Input for Jump
@@ -86,6 +94,11 @@ public class PlayerMovement : MonoBehaviour {
         float v = Input.GetAxis("Vertical");
         m_CamForward = Vector3.Scale(m_Cam.forward, new Vector3(1, 0, 1)).normalized;
         m_Move = (v * m_CamForward + h * m_Cam.right) * walkSpeed;
+
+        if(sprint == true)
+        {
+            m_Move = (v * m_CamForward + h * m_Cam.right) * runSpeed;
+        }
         //m_Character.Move(m_Move);
 
 
