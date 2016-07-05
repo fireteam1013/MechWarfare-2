@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private GameObject cam;
     private GameObject camPivot;
+    private GameObject playerMesh;
 
     //private ThirdPersonCharacter m_Character;   //Get class
     private Transform m_Cam;                    //Transform of the main camera
@@ -16,11 +17,13 @@ public class PlayerMovement : MonoBehaviour {
     private float walkSpeed = 3f;
     private float jumpForce = 4f;
     private bool jump;
+    Vector3 facing;
 
     void Start()
     {
         cam = GameObject.Find("Main Camera");
         camPivot = GameObject.Find("CameraPivot");
+        playerMesh = gameObject.transform.GetChild(1).gameObject;
         rb = GetComponent<Rigidbody>();
         if (Camera.main != null)
         {
@@ -39,10 +42,43 @@ public class PlayerMovement : MonoBehaviour {
         {
         float hm = Input.GetAxis("Mouse X");
         float vm = Input.GetAxis("Mouse Y");
-        cam.transform.localPosition = new Vector3(camPivot.transform.localPosition.x, camPivot.transform.localPosition.y + 3f, camPivot.transform.localPosition.z - 4f);
+        cam.transform.localPosition = new Vector3(camPivot.transform.localPosition.x, camPivot.transform.localPosition.y + 2.25f, camPivot.transform.localPosition.z - 4f);
         camPivot.transform.Rotate(0, hm, 0);
-
+        
+        if (rb.velocity.magnitude != 0)
+        {
+            playerMesh.transform.rotation = Quaternion.LookRotation(m_Move);
+            facing = new Vector3(0, playerMesh.transform.rotation.y, 0);
+            Debug.Log(facing);
         }
+        else if (rb.velocity.magnitude == 0)
+        {
+            playerMesh.transform.eulerAngles = facing;
+        }
+
+
+        if (jump)
+        {
+            rb.velocity = new Vector3(m_Move.x, jumpForce, m_Move.z);
+        }
+        else
+        {
+            rb.velocity = new Vector3(m_Move.x, rb.velocity.y, m_Move.z);
+        }
+
+
+
+
+        //Input for Jump
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jump = true;
+        }
+        else
+        {
+            jump = false;
+        }
+    }
 
     void FixedUpdate()
     {
@@ -52,25 +88,7 @@ public class PlayerMovement : MonoBehaviour {
         m_Move = (v * m_CamForward + h * m_Cam.right) * walkSpeed;
         //m_Character.Move(m_Move);
 
-        if (jump)
-            {
-            rb.velocity = new Vector3(m_Move.x, jumpForce, m_Move.z);
-            }else
-            {
-            rb.velocity = new Vector3(m_Move.x, rb.velocity.y, m_Move.z);
-            }
-        
 
-
-
-        //Input for Jump
-        if (Input.GetKeyDown(KeyCode.Space))
-            {
-            jump = true;
-            }else
-            {
-            jump = false;
-            }
     }
 
 }
