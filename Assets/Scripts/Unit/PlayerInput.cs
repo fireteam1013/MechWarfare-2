@@ -40,33 +40,31 @@ public class PlayerInput : MonoBehaviour {
         {
             if (ttPositionCheck > Time.time)        //If the player just tapped the cntl key
             {
-                if (bp == BodyPosition.Standing)
+                if (bp == BodyPosition.Standing || bp == BodyPosition.Prone)
                 {
                     bp = BodyPosition.Crouching;
+                    
                 }else
                 if (bp == BodyPosition.Crouching)
                 {
                     bp = BodyPosition.Standing;
-                }else
-                if (bp == BodyPosition.Prone)
-                {
-                    bp = BodyPosition.Crouching;
+                    
                 }
+                
                 Debug.Log(ttPositionCheck + " / " + bp);
+                return;
             }
             if (ttPositionCheck < Time.time)        //If the player held the cntl key
             {
-                if (bp == BodyPosition.Standing)
+                if (bp == BodyPosition.Standing || bp == BodyPosition.Crouching)
                 {
                     bp = BodyPosition.Prone;
-                }else
-                if (bp == BodyPosition.Crouching)
-                {
-                    bp = BodyPosition.Prone;
+                    
                 }else
                 if (bp == BodyPosition.Prone)
                 {
                     bp = BodyPosition.Standing;
+                    
                 }
                 Debug.Log(ttPositionCheck + " / " + bp);
             }
